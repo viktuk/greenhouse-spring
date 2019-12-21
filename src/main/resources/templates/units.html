@@ -1,0 +1,71 @@
+<div xmlns:th="http://www.w3.org/1999/xhtml" th:fragment="units(units)" class="container">
+    <div class="card">
+        <div class="card-header">Units</div>
+        <div class="card-body">
+            <table class="table">
+                <thead class="thead-light">
+                <tr>
+                    <th scope="col">Id</th>
+                    <th scope="col">Parameter</th>
+                    <th scope="col">Unit of measurement</th>
+                    <th scope="col">Default value</th>
+                    <th scope="col">Created</th>
+                    <th scope="col">Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:if="${units.empty}">
+                    <td colspan="4">There is no units yet</td>
+                </tr>
+                <tr th:each="unit : ${units}">
+                    <td scope="row"><span th:text="${unit.id}"> Id </span></td>
+                    <td><span th:text="${unit.parameterName}"> Parameter </span></td>
+                    <td><span th:text="${unit.name}"> Unit of measurement </span></td>
+                    <td><span th:text="${unit.defaultValue}"> Default value </span></td>
+                    <td><span th:text="${#dates.format(unit.created, 'dd-MM-yyyy HH:mm')}"> Created </span></td>
+                    <td><a th:href="@{'deleteUnit?unitId=' + ${unit.id}}" class="btn btn-danger">Delete</a></td>
+                </tr>
+                </tbody>
+            </table>
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#createUnitModal">
+                Create new unit
+            </button>
+        </div>
+    </div>
+    <div class="modal fade" id="createUnitModal" tabindex="-1" role="dialog" aria-labelledby="createUnitModal"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Create new unit</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form action="createUnit" method="post">
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="name">Parameter</label>
+                            <input type="text" class="form-control" id="parameterName" name="parameterName"
+                                   placeholder="Enter name of parameter" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="name">Unit of measurement</label>
+                            <input type="text" class="form-control" id="name" name="name"
+                                   placeholder="Enter name of unit of measurement">
+                        </div>
+                        <div class="form-group">
+                            <label for="defaultValue">Default value</label>
+                            <input type="number" class="form-control" id="defaultValue" name="defaultValue"
+                                   placeholder="Enter default value of the environment" required>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Create</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

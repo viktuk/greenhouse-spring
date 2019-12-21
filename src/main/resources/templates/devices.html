@@ -1,0 +1,86 @@
+<div xmlns:th="http://www.w3.org/1999/xhtml" th:fragment="devices(devices, units)" class="container">
+    <div class="card">
+        <div class="card-header">Devices</div>
+        <div class="card-body">
+            <table style="width:100%" class="table">
+                <thead class="thead-light">
+                <tr>
+                    <th scope="col">Id</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Power</th>
+                    <th scope="col">Created</th>
+                    <th scope="col">Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:if="${devices.empty}">
+                    <td colspan="4">There is no devices yet</td>
+                </tr>
+                <tr th:each="device : ${devices}">
+                    <td scope="row"><span th:text="${device.id}"> Id </span></td>
+                    <td><span th:text="${device.name}"> Name </span></td>
+                    <td><span th:text="${device.power}"> Power </span></td>
+                    <td><span th:text="${#dates.format(device.created, 'dd-MM-yyyy HH:mm')}"> Created </span></td>
+                    <td><a th:href="@{'deleteDevice?deviceId=' + ${device.id}}" class="btn btn-danger">Delete</a></td>
+                </tr>
+                </tbody>
+            </table>
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#createDeviceModal"
+                    th:disabled="${units.empty}">Create new device
+            </button>
+        </div>
+    </div>
+    <div class="modal fade" id="createDeviceModal" tabindex="-1" role="dialog" aria-labelledby="createDeviceModal"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Create new device</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form action="createDevice" method="post">
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="name">Name</label>
+                            <input type="text" class="form-control" id="name" name="name"
+                                   placeholder="Enter device name">
+                        </div>
+                        <div class="form-group">
+                            <label for="power">Power</label>
+                            <input type="number" class="form-control" id="power" name="power"
+                                   placeholder="Enter power of the device">
+                        </div>
+                        <div th:each="unit : ${units}">
+                            <div class="form-group">
+                                <label th:for="|increasing:${unit.id}|"
+                                       th:text="|If &quot;${unit.parameterName}&quot; more that expected value|">If unit increasing</label>
+                                <select class="form-control" th:id="|increasing:${unit.id}|"
+                                        th:name="|increasing:${unit.id}|">
+                                    <option value="nothing">Nothing</option>
+                                    <option value="turn_on">Turn on</option>
+                                    <option value="turn_off">Turn off</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label th:for="|decreasing:${unit.id}|"
+                                       th:text="|If &quot;${unit.parameterName}&quot; less that expected value|">If unit decreasing</label>
+                                <select class="form-control" th:id="|decreasing:${unit.id}|"
+                                        th:name="|decreasing:${unit.id}|">
+                                    <option value="nothing">Nothing</option>
+                                    <option value="turn_on">Turn on</option>
+                                    <option value="turn_off">Turn off</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Create</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

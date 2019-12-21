@@ -1,0 +1,87 @@
+<div xmlns:th="http://www.w3.org/1999/xhtml" th:fragment="cultivationParameters(cultivationParameters, units)" class="container">
+    <div class="card">
+        <div class="card-header">Cultivation parameters</div>
+        <div class="card-body">
+            <table style="width:100%" class="table">
+                <thead class="thead-light">
+                <tr>
+                    <th scope="col">Id</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Unit</th>
+                    <th scope="col">Duration</th>
+                    <th scope="col">Expected value</th>
+                    <th scope="col">Created</th>
+                    <th scope="col">Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:if="${cultivationParameters.empty}">
+                    <td colspan="4">There is no cultivation parameters yet</td>
+                </tr>
+                <tr th:each="cultivationParameter : ${cultivationParameters}">
+                    <td scope="row"><span th:text="${cultivationParameter.id}"> Id </span></td>
+                    <td><span th:text="${cultivationParameter.name}"> Name </span></td>
+                    <td><span th:text="${cultivationParameter.unit.parameterName}"> Unit </span></td>
+                    <td><span th:text="${cultivationParameter.duration}"> Duration </span></td>
+                    <td><span
+                            th:text="@{${cultivationParameter.expectedValue} + ' ' + ${cultivationParameter.unit.name}}"> Expected value </span>
+                    </td>
+                    <td><span
+                            th:text="${#dates.format(cultivationParameter.created, 'dd-MM-yyyy HH:mm')}"> Created </span>
+                    </td>
+                    <td>
+                        <a th:href="@{'deleteCultivationParameter?cultivationParameterId=' + ${cultivationParameter.id}}"
+                           class="btn btn-danger">Delete</a></td>
+                </tr>
+                </tbody>
+            </table>
+            <button type="button" class="btn btn-primary" data-toggle="modal"
+                    data-target="#createCultivationParameterModal"
+                    th:disabled="${units.empty}">Create new cultivation parameter
+            </button>
+        </div>
+    </div>
+    <div class="modal fade" id="createCultivationParameterModal" tabindex="-1" role="dialog"
+         aria-labelledby="createCultivationParameterModal"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Create new cultivation parameter</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form action="createCultivationParameter" method="post">
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="name">Name</label>
+                            <input type="text" class="form-control" id="name" name="name"
+                                   placeholder="Enter cultivation parameter name">
+                        </div>
+                        <div class="form-group">
+                            <label for="unitId">Choose unit</label>
+                            <select class="form-control" id="unitId" name="unitId">
+                                <option th:each="unit: ${units}" th:value="${unit.id}"
+                                        th:text="${unit.parameterName}"></option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="name">Duration</label>
+                            <input type="number" class="form-control" id="duration" name="duration"
+                                   placeholder="Count of ticks" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="name">Expected value</label>
+                            <input type="number" class="form-control" id="expectedValue" name="expectedValue" required>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Create</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,67 @@
+<div th:fragment="activeSensors(activeSensors, units)" xmlns:th="http://www.w3.org/1999/xhtml" class="container">
+    <div class="card">
+        <div class="card-header">Active sensors</div>
+        <div class="card-body">
+            <table style="width:100%" class="table">
+                <thead class="thead-light">
+                <tr>
+                    <th scope="col">Id</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Unit</th>
+                    <th scope="col">Created</th>
+                    <th scope="col">Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:if="${activeSensors.empty}">
+                    <td colspan="4">There is no active sensors yet</td>
+                </tr>
+                <tr th:each="sensor : ${activeSensors}">
+                    <td scope="row"><span th:text="${sensor.id}"> Id </span></td>
+                    <td><span th:text="${sensor.name}"> Name </span></td>
+                    <td><span th:text="${sensor.unit?.parameterName}"> Unit </span></td>
+                    <td><span th:text="${#dates.format(sensor.created, 'dd-MM-yyyy HH:mm')}"> Created </span></td>
+                    <td><a th:href="@{'deleteSensor?sensorId=' + ${sensor.id}}" class="btn btn-danger">Delete</a></td>
+                </tr>
+                </tbody>
+            </table>
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#createActiveSensorModal"
+                    th:disabled="${units.empty}">Create new active sensor
+            </button>
+        </div>
+    </div>
+    <div class="modal fade" id="createActiveSensorModal" tabindex="-1" role="dialog"
+         aria-labelledby="createActiveSensorModal"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Create new sensor</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form action="createActiveSensor" method="post">
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="name">Name</label>
+                            <input type="text" class="form-control" id="name" name="name"
+                                   placeholder="Enter sensor name">
+                        </div>
+                        <div class="form-group">
+                            <label for="unitId">Choose unit</label>
+                            <select class="form-control" id="unitId" name="unitId">
+                                <option th:each="unit: ${units}" th:value="${unit.id}"
+                                        th:text="${unit.parameterName}"></option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Create</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

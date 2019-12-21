@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+          crossorigin="anonymous">
+
+    <title th:text="${project?.name}">Project</title>
+</head>
+<body>
+<div th:if="${project == null}">
+    <h1>This project does not exist</h1>
+</div>
+<div th:if="${project != null}" class="container">
+    <div class="container mt-2">
+        <div class="card">
+            <div class="card-header">Control</div>
+            <div class="card-body">
+                <a href="start" class="btn btn-success">Start</a>
+                <a href="stop" class="btn btn-danger">Stop</a>
+            </div>
+        </div>
+    </div>
+    <div class="container mt-2">
+        <div class="card">
+            <div class="card-header">Plot control</div>
+            <div class="card-body">
+                <div class="form-group">
+                    <label for="unitSelector">Select unit</label>
+                    <select class="form-control" id="unitSelector">
+                        <option th:each="unit : ${project.units}" th:value="${unit.id}" th:text="${unit.parameterName}">
+                            Name
+                        </option>
+                    </select>
+                </div>
+                <button class="btn btn-info" onclick="refresh()">Refresh plot</button>
+                <button class="btn btn-success" onclick="startAutoRefresh()">Enable autorefresh</button>
+                <button class="btn btn-danger" onclick="stopAutoRefresh()">Disable autorefresh</button>
+            </div>
+        </div>
+    </div>
+    <div class="container mt-2">
+        <div class="card">
+            <div class="card-header">Plot</div>
+            <div class="card-body">
+                <canvas style="cursor: crosshair; width: 500px"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+        integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+        crossorigin="anonymous"></script>
+<script src="https://d3js.org/d3.v4.min.js"></script>
+<script src="https://d3js.org/d3-hsv.v0.1.min.js"></script>
+<script src="/js/greenhouse_plot.js"></script>
+</body>
+</html>
